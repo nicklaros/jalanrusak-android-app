@@ -31,16 +31,18 @@ sealed class Result<out T> {
         is Success -> data
         is Error -> throw cause ?: IllegalStateException(message)
     }
+
+    companion object
 }
 
 fun <T> Result.Companion.catch(block: () -> T): Result<T> = try {
-    Success(block())
+    Result.Success(block())
 } catch (e: Exception) {
-    Error(e.message ?: "Unknown error", e)
+    Result.Error(e.message ?: "Unknown error", e)
 }
 
 suspend fun <T> Result.Companion.catchSuspend(block: suspend () -> T): Result<T> = try {
-    Success(block())
+    Result.Success(block())
 } catch (e: Exception) {
-    Error(e.message ?: "Unknown error", e)
+    Result.Error(e.message ?: "Unknown error", e)
 }

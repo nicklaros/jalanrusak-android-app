@@ -9,6 +9,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -52,7 +53,7 @@ class LocationManager(private val context: Context) {
         }
     }
 
-    private fun getLastKnownLocation(continuation: kotlin.coroutines.CancellableContinuation<Location>) {
+    private fun getLastKnownLocation(continuation: CancellableContinuation<Location>) {
         try {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {

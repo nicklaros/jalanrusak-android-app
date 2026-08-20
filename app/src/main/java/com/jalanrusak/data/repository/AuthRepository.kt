@@ -1,10 +1,13 @@
 package com.jalanrusak.data.repository
 
 import com.jalanrusak.data.api.ApiClient
+import com.jalanrusak.data.api.getBodyOrThrow
 import com.jalanrusak.data.api.dto.LoginRequest
 import com.jalanrusak.data.api.dto.RefreshTokenRequest
 import com.jalanrusak.data.local.TokenManager
 import com.jalanrusak.util.Result
+import com.jalanrusak.util.catch
+import com.jalanrusak.util.catchSuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -32,7 +35,7 @@ class AuthRepository(
     }
 
     suspend fun logout(): Result<Unit> = withContext(Dispatchers.IO) {
-        Result.catch {
+        Result.catchSuspend {
             tokenManager.clearAll()
         }
     }

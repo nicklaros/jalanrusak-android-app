@@ -1,5 +1,6 @@
 package com.jalanrusak.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -10,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.jalanrusak.JalanRusakApp
 import com.jalanrusak.R
 import com.jalanrusak.databinding.ActivityLoginBinding
+import com.jalanrusak.ui.home.HomeActivity
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -59,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
                             binding.loginButton.isEnabled = true
                             binding.loginButton.text = getString(R.string.login_button)
                             Toast.makeText(this@LoginActivity, "Berhasil masuk!", Toast.LENGTH_SHORT).show()
-                            finish()
+                            goToHome()
                         }
                         is LoginViewModel.LoginUiState.Error -> {
                             binding.loginButton.isEnabled = true
@@ -75,11 +77,16 @@ class LoginActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.isLoggedIn.collect { isLoggedIn ->
                     if (isLoggedIn) {
-                        finish()
+                        goToHome()
                     }
                 }
             }
         }
+    }
+
+    private fun goToHome() {
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
     }
 }
 

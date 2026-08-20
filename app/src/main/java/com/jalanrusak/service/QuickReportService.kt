@@ -27,21 +27,11 @@ class QuickReportService : Service() {
         const val EXTRA_LAT = "extra_lat"
         const val EXTRA_LNG = "extra_lng"
 
-        private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         lateinit var submitUseCase: SubmitQuickReportUseCase
         lateinit var locationManager: LocationManager
 
         private val _reportState = MutableStateFlow<ReportState>(ReportState.Idle)
         val reportState: StateFlow<ReportState> = _reportState.asStateFlow()
-
-        sealed class ReportState {
-            object Idle : ReportState()
-            object Locating : ReportState()
-            object Submitting : ReportState()
-            data class Success(val reportId: String, val title: String) : ReportState()
-            data class Error(val message: String) : ReportState()
-            object NotLoggedIn : ReportState()
-        }
 
         fun startReport(context: Context) {
             val intent = Intent(context, QuickReportService::class.java).apply {
@@ -49,6 +39,15 @@ class QuickReportService : Service() {
             }
             context.startService(intent)
         }
+    }
+
+    sealed class ReportState {
+        object Idle : ReportState()
+        object Locating : ReportState()
+        object Submitting : ReportState()
+        data class Success(val reportId: String, val title: String) : ReportState()
+        data class Error(val message: String) : ReportState()
+        object NotLoggedIn : ReportState()
     }
 
     private val serviceJob = SupervisorJob()
@@ -113,8 +112,13 @@ class QuickReportService : Service() {
                 stopSelf()
 
             } catch (e: Exception) {
-                _reportState.value = ReportState.Error(e.message ?: "Terjadi kesalahan")
-                showNotification("Gagal", e.message ?: "Terjadi kesalahan")
+                val message = if (e is SecurityException) {
+                    getString(R.string.error_permission_location)
+                } else {
+                    e.message ?: "Terjadi kesalahan"
+                }
+                _reportState.value = ReportState.Error(message)
+                showNotification("Gagal", message)
                 stopSelf()
             }
         }

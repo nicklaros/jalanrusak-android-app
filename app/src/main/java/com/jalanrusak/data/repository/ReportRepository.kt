@@ -1,10 +1,12 @@
 package com.jalanrusak.data.repository
 
 import com.jalanrusak.data.api.ApiClient
+import com.jalanrusak.data.api.getBodyOrThrow
 import com.jalanrusak.data.api.dto.CreateReportRequest
 import com.jalanrusak.data.api.dto.PointDto
 import com.jalanrusak.data.api.dto.ReportResponse
 import com.jalanrusak.util.Result
+import com.jalanrusak.util.catchSuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Date

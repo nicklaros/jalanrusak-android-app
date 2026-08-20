@@ -19,6 +19,9 @@ class LoginViewModel(
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
 
+    private val _userEmail = MutableStateFlow<String?>(null)
+    val userEmail: StateFlow<String?> = _userEmail.asStateFlow()
+
     sealed class LoginUiState {
         object Idle : LoginUiState()
         object Loading : LoginUiState()
@@ -33,6 +36,17 @@ class LoginViewModel(
     private fun checkLoginStatus() {
         viewModelScope.launch {
             _isLoggedIn.value = loginUseCase.isLoggedIn()
+            if (_isLoggedIn.value) {
+                _userEmail.value = loginUseCase.getUserEmail()
+            }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            loginUseCase.logout()
+            _userEmail.value = null
+            _isLoggedIn.value = false
         }
     }
 

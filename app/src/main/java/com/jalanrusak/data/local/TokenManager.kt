@@ -30,13 +30,13 @@ class TokenManager(private val context: Context) {
     }
 
     suspend fun getAccessToken(): String? {
-        return context.dataStore.map { preferences ->
+        return context.dataStore.data.map { preferences ->
             preferences[ACCESS_TOKEN_KEY]
         }.first()
     }
 
     suspend fun getRefreshToken(): String? {
-        return context.dataStore.map { preferences ->
+        return context.dataStore.data.map { preferences ->
             preferences[REFRESH_TOKEN_KEY]
         }.first()
     }
@@ -50,21 +50,21 @@ class TokenManager(private val context: Context) {
     }
 
     suspend fun getUserId(): String? {
-        return context.dataStore.map { preferences ->
+        return context.dataStore.data.map { preferences ->
             preferences[USER_ID_KEY]
         }.first()
     }
 
     suspend fun getUserEmail(): String? {
-        return context.dataStore.map { preferences ->
+        return context.dataStore.data.map { preferences ->
             preferences[USER_EMAIL_KEY]
         }.first()
     }
 
     suspend fun getUserName(): String? {
-        return context.dataStore.map { preferences ->
+        return context.dataStore.data.map { preferences ->
             preferences[USER_NAME_KEY]
-        }.first().takeIf { it.isNotEmpty() }
+        }.first()?.takeIf { it.isNotEmpty() }
     }
 
     suspend fun clearAll() {

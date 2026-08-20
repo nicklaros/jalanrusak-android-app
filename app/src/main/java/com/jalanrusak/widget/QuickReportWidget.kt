@@ -33,17 +33,13 @@ class QuickReportWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         if (ACTION_CLICK == intent.action) {
-            // Start the overlay activity
+            // Start the overlay activity; it launches the report service once it is
+            // in the foreground, since starting a service from this background
+            // receiver is restricted on Android 8+
             val overlayIntent = Intent(context, QuickReportOverlay::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
             context.startActivity(overlayIntent)
-
-            // Start the background service to submit the report
-            val serviceIntent = Intent(context, QuickReportService::class.java).apply {
-                action = QuickReportService.ACTION_SUBMIT_REPORT
-            }
-            context.startService(serviceIntent)
         }
     }
 

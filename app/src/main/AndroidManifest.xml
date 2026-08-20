@@ -33,6 +33,12 @@
             </intent-filter>
         </activity>
 
+        <!-- Home Activity -->
+        <activity
+            android:name=".ui.home.HomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.JalanRusak" />
+
         <!-- Quick Report Overlay Activity -->
         <activity
             android:name=".ui.overlay.QuickReportOverlay"

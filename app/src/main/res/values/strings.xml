@@ -31,4 +31,23 @@
     <string name="error_no_internet">Tidak ada koneksi internet</string>
     <string name="error_not_logged_in">Silakan masuk terlebih dahulu</string>
     <string name="error_server">Gagal terhubung ke server</string>
+    <string name="error_permission_location">Izin lokasi belum diberikan. Buka aplikasi Jalan Rusak untuk mengizinkan.</string>
+
+    <!-- Home -->
+    <string name="home_title">Siap Melapor</string>
+    <string name="home_logged_in_as">Sudah masuk sebagai %1$s</string>
+    <string name="home_logged_in_plain">Sudah masuk</string>
+    <string name="home_how_title">Cara Mengirim Laporan</string>
+    <string name="home_how_step1">1. Tekan lama area kosong di layar utama, pilih Widget, lalu tambahkan widget Lapor Cepat.</string>
+    <string name="home_how_step2">2. Ketuk widget tersebut — laporan jalan rusak akan otomatis dikirim dari lokasi Anda saat ini.</string>
+    <string name="home_permission_title">Izin Aplikasi</string>
+    <string name="home_permission_desc">Diperlukan agar widget dapat mengambil lokasi dan menampilkan notifikasi status laporan.</string>
+    <string name="home_permission_location">Lokasi</string>
+    <string name="home_permission_notifications">Notifikasi</string>
+    <string name="home_permission_granted">✓ Diizinkan</string>
+    <string name="home_permission_denied">✗ Belum diizinkan</string>
+    <string name="home_grant_permission">Berikan Izin</string>
+    <string name="home_logout">Keluar</string>
+    <string name="home_report_now">Lapor Sekarang</string>
+    <string name="home_need_location_permission">Berikan izin lokasi terlebih dahulu untuk mengirim laporan</string>
 </resources>

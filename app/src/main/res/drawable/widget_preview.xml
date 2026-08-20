@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="80dp"
+    android:viewportWidth="160"
+    android:viewportHeight="80">
+    <rect
+        android:width="160"
+        android:height="80"
+        android:fillColor="@color/accent" />
+    <path
+        android:fillColor="@color/white"
+        android:pathData="M20,24 L32,24 L32,28 L20,28 Z M20,32 L32,32 L32,36 L20,36 Z M20,40 L32,40 L32,44 L20,44 Z" />
+    <text
+        android:x="40"
+        android:y="48"
+        android:textSize="24"
+        android:fillColor="@color/white"
+        android:text="Lapor Cepat" />
+</vector>

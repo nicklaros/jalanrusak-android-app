@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Jalan Rusak</string>
+
+    <!-- Widget -->
+    <string name="widget_name">Lapor Cepat</string>
+    <string name="widget_description">Laporkan jalan rusak dengan satu sentuhan</string>
+
+    <!-- Quick Report -->
+    <string name="quick_report_locating">Mendapatkan lokasi…</string>
+    <string name="quick_report_submitting">Mengirim laporan…</string>
+    <string name="quick_report_success">✓ Laporan terkirim!</string>
+    <string name="quick_report_error">Gagal mengirim laporan</string>
+
+    <!-- Login -->
+    <string name="login_title">Masuk</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="login_button">Masuk</string>
+    <string name="login_success">Berhasil masuk!</string>
+    <string name="login_error">Email atau password salah</string>
+    <string name="login_no_connection">Tidak ada koneksi internet</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">Laporan</string>
+    <string name="notification_channel_description">Notifikasi status laporan jalan rusak</string>
+    <string name="notification_report_success">Laporan berhasil dikirim</string>
+    <string name="notification_report_failed">Gagal mengirim laporan</string>
+
+    <!-- Errors -->
+    <string name="error_no_location">Tidak bisa mendapatkan lokasi. Pastikan GPS aktif.</string>
+    <string name="error_no_internet">Tidak ada koneksi internet</string>
+    <string name="error_not_logged_in">Silakan masuk terlebih dahulu</string>
+    <string name="error_server">Gagal terhubung ke server</string>
+</resources>

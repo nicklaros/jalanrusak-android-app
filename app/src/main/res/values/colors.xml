@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary colors (matching web app) -->
+    <color name="primary">#0ea5e9</color>
+    <color name="primary_dark">#0369a1</color>
+    <color name="primary_light">#38bdf8</color>
+
+    <!-- Accent colors -->
+    <color name="accent">#ef4444</color>
+    <color name="accent_dark">#b91c1c</color>
+
+    <!-- Status colors -->
+    <color name="success">#22c55e</color>
+    <color name="warning">#f59e0b</color>
+    <color name="error">#dc2626</color>
+
+    <!-- Neutral colors -->
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="gray_100">#f3f4f6</color>
+    <color name="gray_200">#e5e7eb</color>
+    <color name="gray_300">#d1d5db</color>
+    <color name="gray_500">#6b7280</color>
+    <color name="gray_700">#374151</color>
+    <color name="gray_900">#111827</color>
+
+    <!-- Overlay colors -->
+    <color name="overlay_background">#E6FFFFFF</color>
+    <color name="overlay_text">#111827</color>
+</resources>

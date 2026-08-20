@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -16,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
 import com.jalanrusak.JalanRusakApp
 import com.jalanrusak.R
 import com.jalanrusak.databinding.ActivityHomeBinding
@@ -45,7 +45,12 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initialize ViewModel with context for SharedPreferences
+        viewModel.initialize(this)
+
         setupTopAreasList()
+        setupLevelChips()
+        setupSwipeRefresh()
         setupUI()
         observeState()
         refreshPermissionStatus()
@@ -71,6 +76,46 @@ class HomeActivity : AppCompatActivity() {
         binding.topAreasRecycler.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
             adapter = topAreasAdapter
+        }
+    }
+
+    private fun setupLevelChips() {
+        // Set initial selection from saved preference
+        val savedLevel = viewModel.getSavedLevel(this)
+        val chipId = when (savedLevel) {
+            "province" -> R.id.chipProvince
+            "city" -> R.id.chipCity
+            "district" -> R.id.chipDistrict
+            "subdistrict" -> R.id.chipSubdistrict
+            else -> R.id.chipCity
+        }
+        binding.levelChipGroup.check(chipId)
+
+        // Listen for chip selection changes
+        binding.levelChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            if (checkedIds.isNotEmpty()) {
+                val newLevel = when (checkedIds.first()) {
+                    R.id.chipProvince -> "province"
+                    R.id.chipCity -> "city"
+                    R.id.chipDistrict -> "district"
+                    R.id.chipSubdistrict -> "subdistrict"
+                    else -> "city"
+                }
+                // Save the selected level
+                viewModel.saveLevel(this, newLevel)
+                // Load data for the new level
+                viewModel.loadTopAreas(newLevel)
+            }
+        }
+    }
+
+    private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setColorSchemeColors(
+            ContextCompat.getColor(this, R.color.primary),
+            ContextCompat.getColor(this, R.color.accent)
+        )
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.loadTopAreas()
         }
     }
 
@@ -138,48 +183,33 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
-
-        // Show login prompt
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.showLoginPrompt.collect { show ->
-                    if (show) {
-                        showLoginRequiredAndNavigate()
-                    }
-                }
-            }
-        }
     }
 
     private fun showLoading() {
+        binding.swipeRefresh.isRefreshing = false
         binding.loadingLayout.visibility = View.VISIBLE
         binding.topAreasRecycler.visibility = View.GONE
-        binding.errorText.visibility = View.GONE
-        binding.retryButton.visibility = View.GONE
+        binding.errorLayout.visibility = View.GONE
     }
 
     private fun showTopAreas(data: List<com.jalanrusak.data.api.dto.TopAreaResponse>) {
+        binding.swipeRefresh.isRefreshing = false
         binding.loadingLayout.visibility = View.GONE
         binding.topAreasRecycler.visibility = View.VISIBLE
-        binding.errorText.visibility = View.GONE
-        binding.retryButton.visibility = View.GONE
+        binding.errorLayout.visibility = View.GONE
         topAreasAdapter.submitList(data)
     }
 
     private fun showError(message: String) {
+        binding.swipeRefresh.isRefreshing = false
         binding.loadingLayout.visibility = View.GONE
         binding.topAreasRecycler.visibility = View.GONE
-        binding.errorText.visibility = View.VISIBLE
-        binding.retryButton.visibility = View.VISIBLE
+        binding.errorLayout.visibility = View.VISIBLE
         binding.errorText.text = message
     }
 
     private fun updateLoginUI(isLoggedIn: Boolean) {
-        if (isLoggedIn) {
-            binding.logoutButton.visibility = View.VISIBLE
-        } else {
-            binding.logoutButton.visibility = View.GONE
-        }
+        binding.logoutButton.visibility = if (isLoggedIn) View.VISIBLE else View.GONE
     }
 
     private fun showLoginRequiredAndNavigate() {
@@ -188,7 +218,6 @@ class HomeActivity : AppCompatActivity() {
             R.string.home_login_required,
             Toast.LENGTH_LONG
         ).show()
-        viewModel.clearLoginPrompt()
         goToLogin()
     }
 
@@ -227,27 +256,25 @@ class HomeActivity : AppCompatActivity() {
 
     private fun refreshPermissionStatus() {
         val locationGranted = hasLocationPermission()
-
         val notificationsGranted = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             ContextCompat.checkSelfPermission(
                 this, Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
 
-        setStatus(binding.locationStatusText, locationGranted)
-        setStatus(binding.notificationStatusText, notificationsGranted)
+        // Update compact status indicators
+        binding.locationStatusText.apply {
+            text = getString(if (locationGranted) R.string.home_status_on else R.string.home_status_off)
+            setTextColor(ContextCompat.getColor(this@HomeActivity, if (locationGranted) R.color.success else R.color.error))
+        }
 
+        binding.notificationStatusText.apply {
+            text = getString(if (notificationsGranted) R.string.home_status_on else R.string.home_status_off)
+            setTextColor(ContextCompat.getColor(this@HomeActivity, if (notificationsGranted) R.color.success else R.color.error))
+        }
+
+        // Show/hide grant button
         binding.grantButton.visibility =
             if (locationGranted && notificationsGranted) View.GONE else View.VISIBLE
-    }
-
-    private fun setStatus(view: TextView, granted: Boolean) {
-        if (granted) {
-            view.text = getString(R.string.home_permission_granted)
-            view.setTextColor(ContextCompat.getColor(this, R.color.success))
-        } else {
-            view.text = getString(R.string.home_permission_denied)
-            view.setTextColor(ContextCompat.getColor(this, R.color.error))
-        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.jalanrusak.ui.home
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jalanrusak.data.api.dto.TopAreaResponse
@@ -17,6 +18,12 @@ class HomeViewModel(
     private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
+    companion object {
+        private const val PREFS_NAME = "home_prefs"
+        private const val KEY_LEVEL = "selected_level"
+        private const val DEFAULT_LEVEL = "city"
+    }
+
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Idle)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
@@ -29,6 +36,8 @@ class HomeViewModel(
     private val _showLoginPrompt = MutableStateFlow(false)
     val showLoginPrompt: StateFlow<Boolean> = _showLoginPrompt.asStateFlow()
 
+    private var currentLevel = DEFAULT_LEVEL
+
     sealed class HomeUiState {
         object Idle : HomeUiState()
         object Loading : HomeUiState()
@@ -37,8 +46,13 @@ class HomeViewModel(
     }
 
     init {
+        // Load saved level (will be set from Activity context later)
         checkLoginStatus()
-        loadTopAreas()
+    }
+
+    fun initialize(context: Context) {
+        currentLevel = getSavedLevel(context)
+        loadTopAreas(currentLevel)
     }
 
     private fun checkLoginStatus() {
@@ -50,7 +64,8 @@ class HomeViewModel(
         }
     }
 
-    fun loadTopAreas(level: String = "city") {
+    fun loadTopAreas(level: String = DEFAULT_LEVEL) {
+        currentLevel = level
         viewModelScope.launch {
             _uiState.value = HomeUiState.Loading
 
@@ -75,10 +90,8 @@ class HomeViewModel(
 
     fun onReportNowClicked() {
         if (_isLoggedIn.value) {
-            // Logged in - will be handled by Activity
             _showLoginPrompt.value = false
         } else {
-            // Not logged in - show login prompt
             _showLoginPrompt.value = true
         }
     }
@@ -89,5 +102,17 @@ class HomeViewModel(
 
     fun refreshLoginStatus() {
         checkLoginStatus()
+    }
+
+    fun getSavedLevel(context: Context): String {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(KEY_LEVEL, DEFAULT_LEVEL) ?: DEFAULT_LEVEL
+    }
+
+    fun saveLevel(context: Context, level: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(KEY_LEVEL, level)
+            .apply()
     }
 }

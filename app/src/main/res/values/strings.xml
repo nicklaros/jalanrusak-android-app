@@ -57,7 +57,22 @@
     <string name="home_top_areas_subtitle">10 wilayah dengan laporan jalan rusak terkonfirmasi terbanyak</string>
     <string name="home_top_areas_level_badge">KOTA/KAB</string>
     <string name="home_top_areas_reports">laporan</string>
+    <string name="home_top_areas_reports_short">lapor</string>
     <string name="home_top_areas_error">Gagal memuat data. Silakan coba lagi.</string>
+
+    <!-- Level Selection -->
+    <string name="home_level_province">Provinsi</string>
+    <string name="home_level_city">Kota/Kab</string>
+    <string name="home_level_district">Kecamatan</string>
+    <string name="home_level_subdistrict">Kel/Desa</string>
+
+    <!-- Compact Labels -->
+    <string name="home_how_title_compact">Cara Pakai</string>
+    <string name="home_how_compact">Tambahkan widget Lapor Cepat ke home screen untuk lapor instan</string>
+    <string name="home_permission_title_compact">Izin</string>
+    <string name="home_grant_permission_compact">Berikan</string>
+    <string name="home_status_on">✓</string>
+    <string name="home_status_off">✗</string>
 
     <!-- Common -->
     <string name="loading">Memuat…</string>

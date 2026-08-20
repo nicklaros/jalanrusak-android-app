@@ -5,27 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
-    app:contentPadding="12dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/gray_200">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="12dp">
 
         <!-- Rank Badge -->
         <TextView
             android:id="@+id/rankText"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:gravity="center"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
             android:background="@drawable/ic_launcher_background"
-            tools:text="1" />
+            tools:text="🥇" />
 
         <!-- Area Info -->
         <LinearLayout
@@ -40,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_900"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -50,18 +51,25 @@
                 android:id="@+id/areaCodeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:textColor="@color/gray_500"
-                android:textSize="12sp"
+                android:textSize="11sp"
+                android:fontFamily="monospace"
                 tools:text="35.78" />
 
         </LinearLayout>
 
-        <!-- Report Count -->
+        <!-- Report Count Badge -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/ic_launcher_background"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:layout_marginStart="8dp">
 
             <TextView
@@ -69,16 +77,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/error"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="42" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/home_top_areas_reports"
+                android:text="@string/home_top_areas_reports_short"
                 android:textColor="@color/gray_500"
-                android:textSize="10sp" />
+                android:textSize="11sp"
+                android:layout_marginStart="2dp" />
 
         </LinearLayout>
 

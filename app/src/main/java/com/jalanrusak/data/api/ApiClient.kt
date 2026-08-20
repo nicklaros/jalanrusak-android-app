@@ -2,6 +2,7 @@ package com.jalanrusak.data.api
 
 import com.jalanrusak.BuildConfig
 import com.jalanrusak.data.api.dto.*
+import com.jalanrusak.data.api.dto.TopAreasListResponse
 import com.jalanrusak.data.local.TokenManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -16,6 +17,8 @@ import java.util.concurrent.TimeUnit
 object ApiClient {
 
     private const val BASE_URL = "https://api.jalanrusak.com/api/v1/"
+
+    private const val DEFAULT_LEVEL = "city"
 
     private lateinit var apiService: JalanRusakApi
     private lateinit var tokenManager: TokenManager
@@ -72,6 +75,11 @@ object ApiClient {
         }
         return apiService
     }
+
+    suspend fun getTopAreas(level: String = DEFAULT_LEVEL): TopAreasListResponse {
+        val response = apiService.getTopAreas(level)
+        return response.getBodyOrThrow()
+    }
 }
 
 interface JalanRusakApi {
@@ -86,6 +94,12 @@ interface JalanRusakApi {
     // Reports
     @POST("damaged-roads")
     suspend fun createReport(@Body request: CreateReportRequest): Response<ReportResponse>
+
+    // Top Areas (public endpoint - no auth required)
+    @GET("damaged-roads/top-areas")
+    suspend fun getTopAreas(
+        @Query("level") level: String
+    ): Response<TopAreasListResponse>
 }
 
 // Wrapper for Response to handle errors more easily

@@ -15,21 +15,23 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jalanrusak.JalanRusakApp
 import com.jalanrusak.R
 import com.jalanrusak.databinding.ActivityHomeBinding
 import com.jalanrusak.ui.login.LoginActivity
-import com.jalanrusak.ui.login.LoginViewModel
-import com.jalanrusak.ui.login.LoginViewModelFactory
 import com.jalanrusak.ui.overlay.QuickReportOverlay
 import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
-    private val viewModel: LoginViewModel by viewModels {
-        // TODO: Inject dependencies properly
-        LoginViewModelFactory((application as JalanRusakApp).provideLoginUseCase())
+    private lateinit var topAreasAdapter: TopAreasAdapter
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(
+            (application as JalanRusakApp).provideGetTopAreasUseCase(),
+            (application as JalanRusakApp).provideLoginUseCase()
+        )
     }
 
     private val permissionLauncher = registerForActivityResult(
@@ -43,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupTopAreasList()
         setupUI()
         observeState()
         refreshPermissionStatus()
@@ -50,26 +53,82 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Permissions may also have been granted from system settings
+        viewModel.refreshLoginStatus()
         refreshPermissionStatus()
     }
 
-    private fun setupUI() {
-        binding.reportNowButton.setOnClickListener { submitReport() }
-        binding.grantButton.setOnClickListener { requestPermissions() }
-        binding.logoutButton.setOnClickListener { viewModel.logout() }
+    private fun setupTopAreasList() {
+        topAreasAdapter = TopAreasAdapter(
+            onItemClick = { topArea ->
+                // Could show details or navigate to map in the future
+                Toast.makeText(
+                    this,
+                    "${topArea.name}: ${topArea.reportCount} laporan",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        )
+        binding.topAreasRecycler.apply {
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            adapter = topAreasAdapter
+        }
     }
 
-    private fun submitReport() {
-        if (!hasLocationPermission()) {
-            Toast.makeText(this, R.string.home_need_location_permission, Toast.LENGTH_LONG).show()
-            requestPermissions()
-            return
+    private fun setupUI() {
+        binding.reportNowButton.setOnClickListener {
+            onReportNowClicked()
         }
-        startActivity(Intent(this, QuickReportOverlay::class.java))
+
+        binding.grantButton.setOnClickListener { requestPermissions() }
+
+        binding.logoutButton.setOnClickListener { viewModel.logout() }
+
+        binding.retryButton.setOnClickListener {
+            viewModel.loadTopAreas()
+        }
+    }
+
+    private fun onReportNowClicked() {
+        if (viewModel.isLoggedIn.value) {
+            submitReport()
+        } else {
+            showLoginRequiredAndNavigate()
+        }
     }
 
     private fun observeState() {
+        // Top areas UI state
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is HomeViewModel.HomeUiState.Idle -> {
+                            // Initial state
+                        }
+                        is HomeViewModel.HomeUiState.Loading -> {
+                            showLoading()
+                        }
+                        is HomeViewModel.HomeUiState.Success -> {
+                            showTopAreas(state.data)
+                        }
+                        is HomeViewModel.HomeUiState.Error -> {
+                            showError(state.message)
+                        }
+                    }
+                }
+            }
+        }
+
+        // Login status
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isLoggedIn.collect { isLoggedIn ->
+                    updateLoginUI(isLoggedIn)
+                }
+            }
+        }
+
+        // User email
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userEmail.collect { email ->
@@ -80,23 +139,70 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+        // Show login prompt
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.isLoggedIn.collect { isLoggedIn ->
-                    if (!isLoggedIn) {
-                        goToLogin()
+                viewModel.showLoginPrompt.collect { show ->
+                    if (show) {
+                        showLoginRequiredAndNavigate()
                     }
                 }
             }
         }
     }
 
-    private fun goToLogin() {
-        val intent = Intent(this, LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    private fun showLoading() {
+        binding.loadingLayout.visibility = View.VISIBLE
+        binding.topAreasRecycler.visibility = View.GONE
+        binding.errorText.visibility = View.GONE
+        binding.retryButton.visibility = View.GONE
+    }
+
+    private fun showTopAreas(data: List<com.jalanrusak.data.api.dto.TopAreaResponse>) {
+        binding.loadingLayout.visibility = View.GONE
+        binding.topAreasRecycler.visibility = View.VISIBLE
+        binding.errorText.visibility = View.GONE
+        binding.retryButton.visibility = View.GONE
+        topAreasAdapter.submitList(data)
+    }
+
+    private fun showError(message: String) {
+        binding.loadingLayout.visibility = View.GONE
+        binding.topAreasRecycler.visibility = View.GONE
+        binding.errorText.visibility = View.VISIBLE
+        binding.retryButton.visibility = View.VISIBLE
+        binding.errorText.text = message
+    }
+
+    private fun updateLoginUI(isLoggedIn: Boolean) {
+        if (isLoggedIn) {
+            binding.logoutButton.visibility = View.VISIBLE
+        } else {
+            binding.logoutButton.visibility = View.GONE
         }
-        startActivity(intent)
-        finish()
+    }
+
+    private fun showLoginRequiredAndNavigate() {
+        Toast.makeText(
+            this@HomeActivity,
+            R.string.home_login_required,
+            Toast.LENGTH_LONG
+        ).show()
+        viewModel.clearLoginPrompt()
+        goToLogin()
+    }
+
+    private fun goToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
+
+    private fun submitReport() {
+        if (!hasLocationPermission()) {
+            Toast.makeText(this, R.string.home_need_location_permission, Toast.LENGTH_LONG).show()
+            requestPermissions()
+            return
+        }
+        startActivity(Intent(this, QuickReportOverlay::class.java))
     }
 
     private fun requestPermissions() {
@@ -122,7 +228,6 @@ class HomeActivity : AppCompatActivity() {
     private fun refreshPermissionStatus() {
         val locationGranted = hasLocationPermission()
 
-        // Notifications don't need a runtime permission before Android 13
         val notificationsGranted = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             ContextCompat.checkSelfPermission(
                 this, Manifest.permission.POST_NOTIFICATIONS
@@ -143,5 +248,16 @@ class HomeActivity : AppCompatActivity() {
             view.text = getString(R.string.home_permission_denied)
             view.setTextColor(ContextCompat.getColor(this, R.color.error))
         }
+    }
+}
+
+// Factory for HomeViewModel
+class HomeViewModelFactory(
+    private val getTopAreasUseCase: com.jalanrusak.domain.usecase.GetTopAreasUseCase,
+    private val loginUseCase: com.jalanrusak.domain.usecase.LoginUseCase
+) : androidx.lifecycle.ViewModelProvider.Factory {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        return HomeViewModel(getTopAreasUseCase, loginUseCase) as T
     }
 }

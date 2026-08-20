@@ -36,7 +36,7 @@
     <!-- Home -->
     <string name="home_title">Siap Melapor</string>
     <string name="home_logged_in_as">Sudah masuk sebagai %1$s</string>
-    <string name="home_logged_in_plain">Sudah masuk</string>
+    <string name="home_logged_in_plain">Lapor untuk perbaikan jalan</string>
     <string name="home_how_title">Cara Mengirim Laporan</string>
     <string name="home_how_step1">1. Tekan lama area kosong di layar utama, pilih Widget, lalu tambahkan widget Lapor Cepat.</string>
     <string name="home_how_step2">2. Ketuk widget tersebut — laporan jalan rusak akan otomatis dikirim dari lokasi Anda saat ini.</string>
@@ -50,4 +50,16 @@
     <string name="home_logout">Keluar</string>
     <string name="home_report_now">Lapor Sekarang</string>
     <string name="home_need_location_permission">Berikan izin lokasi terlebih dahulu untuk mengirim laporan</string>
+    <string name="home_login_required">Silakan login terlebih dahulu untuk mengirim laporan</string>
+
+    <!-- Top Areas (Hall of Shame) -->
+    <string name="home_top_areas_title">Papan Malu Jalan Rusak</string>
+    <string name="home_top_areas_subtitle">10 wilayah dengan laporan jalan rusak terkonfirmasi terbanyak</string>
+    <string name="home_top_areas_level_badge">KOTA/KAB</string>
+    <string name="home_top_areas_reports">laporan</string>
+    <string name="home_top_areas_error">Gagal memuat data. Silakan coba lagi.</string>
+
+    <!-- Common -->
+    <string name="loading">Memuat…</string>
+    <string name="retry">Coba Lagi</string>
 </resources>

@@ -5,59 +5,187 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:background="@color/gray_100"
     tools:context=".ui.home.HomeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:contentDescription="Logo"
-            android:src="@drawable/ic_launcher_foreground" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Header with logo -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:text="@string/home_title"
-            android:textColor="@color/primary"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:padding="24dp"
+            android:elevation="2dp">
 
-        <TextView
-            android:id="@+id/emailText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp"
-            android:textColor="@color/gray_500"
-            android:textSize="14sp"
-            tools:text="Sudah masuk sebagai user@example.com" />
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="Logo"
+                android:src="@drawable/ic_launcher_foreground" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/app_name"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/emailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/gray_500"
+                android:textSize="13sp"
+                tools:text="user@example.com" />
+
+        </LinearLayout>
+
+        <!-- Report Now Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/reportNowButton"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginBottom="24dp"
+            android:layout_margin="16dp"
             android:text="@string/home_report_now"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:backgroundTint="@color/primary"
+            app:backgroundTint="@color/accent"
             app:icon="@drawable/ic_report"
             app:iconGravity="textStart"
             app:iconTint="@color/white" />
 
+        <!-- Hall of Shame Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Title -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/home_top_areas_title"
+                        android:textColor="@color/error"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_top_areas_level_badge"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:background="@color/primary"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:layout_marginStart="8dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/home_top_areas_subtitle"
+                    android:textColor="@color/gray_500"
+                    android:textSize="13sp" />
+
+                <!-- Loading indicator -->
+                <LinearLayout
+                    android:id="@+id/loadingLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ProgressBar
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:indeterminateTint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/loading"
+                        android:textColor="@color/gray_500"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <!-- Error message -->
+                <TextView
+                    android:id="@+id/errorText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/home_top_areas_error"
+                    android:textColor="@color/error"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <!-- Retry button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/retryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/retry"
+                    android:textSize="12sp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <!-- Top areas list -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/topAreasRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_top_area" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- How to use section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
@@ -93,12 +221,17 @@
                     android:text="@string/home_how_step2"
                     android:textColor="@color/gray_700"
                     android:textSize="14sp" />
+
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Permissions section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
             app:contentPadding="16dp">
@@ -147,6 +280,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         tools:text="✓ Diizinkan" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -171,6 +305,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         tools:text="✗ Belum diizinkan" />
+
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
@@ -180,17 +315,22 @@
                     android:text="@string/home_grant_permission"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/primary" />
+
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Logout button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/logoutButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/home_logout"
             android:textColor="@color/error" />
+
     </LinearLayout>
+
 </ScrollView>

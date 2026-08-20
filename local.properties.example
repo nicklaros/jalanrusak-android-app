@@ -1,0 +1,12 @@
+# This file must be checked in to Version Control Systems, as it specifies
+# the SDK location that the Android Studio will use to build the project.
+# However, you should NOT commit the local.properties file with your SDK path
+# as it varies from machine to machine.
+
+# To build this project, you need to:
+# 1. Install Android Studio (https://developer.android.com/studio)
+# 2. Open this project in Android Studio
+# 3. The SDK will be automatically detected
+
+# Alternatively, set ANDROID_HOME environment variable or uncomment below:
+# sdk.dir=/path/to/your/Android/Sdk

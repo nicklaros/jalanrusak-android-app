@@ -89,16 +89,32 @@ app/src/main/
 ## Building the Project
 
 ### Prerequisites
-- Android Studio Hedgehog or later
+- Android Studio Hedgehog or later (recommended)
 - JDK 17
 - Android SDK 34
 
-### Build Steps
+### Build Steps (Recommended - Android Studio)
+
 1. Clone this repository
-2. Open in Android Studio
-3. Sync Gradle dependencies
-4. Build APK: `./gradlew assembleDebug`
-5. Install on device: `adb install app/build/outputs/apk/debug/app-debug.apk`
+2. Open the project in Android Studio
+3. Android Studio will automatically detect the SDK location
+4. Wait for Gradle sync to complete
+5. Build APK: **Build > Build Bundle(s) / APK(s) > Build APK(s)**
+6. Install on device: `adb install app/build/outputs/apk/debug/app-debug.apk`
+
+### Build Steps (Command Line)
+
+If you have Android SDK installed separately:
+
+1. Copy `local.properties.example` to `local.properties`
+2. Set your SDK path in `local.properties`:
+   ```properties
+   sdk.dir=/path/to/your/Android/Sdk
+   ```
+3. Or set `ANDROID_HOME` environment variable
+4. Build: `./gradlew assembleDebug`
+
+**Note:** If you don't have Android SDK installed, the easiest way is to use Android Studio.
 
 ## Usage
 

@@ -40,7 +40,10 @@ class TopAreasAdapter(
 
         fun bind(item: TopAreaResponse) {
             binding.rankText.text = getRankDisplay(item.rank)
-            binding.areaNameText.text = item.name ?: item.code
+
+            // Format name with parent area context
+            val displayName = formatAreaName(item)
+            binding.areaNameText.text = displayName
             binding.areaCodeText.text = item.code
             binding.reportCountText.text = item.reportCount.toString()
 
@@ -57,6 +60,40 @@ class TopAreasAdapter(
 
             binding.root.setOnClickListener {
                 onItemClick?.invoke(item)
+            }
+        }
+
+        private fun formatAreaName(item: TopAreaResponse): String {
+            val areaName = item.name ?: item.code
+            return when (item.level) {
+                "city" -> {
+                    // "Kota Surabaya, Jawa Timur"
+                    if (item.provinceName != null) {
+                        "$areaName, ${item.provinceName}"
+                    } else {
+                        areaName
+                    }
+                }
+                "district" -> {
+                    // "Kec. Genteng, Kota Surabaya, Jawa Timur"
+                    val city = item.cityName
+                    val province = item.provinceName
+                    when {
+                        city != null && province != null -> "$areaName, $city, $province"
+                        city != null -> "$areaName, $city"
+                        else -> areaName
+                    }
+                }
+                "subdistrict" -> {
+                    // "Kel. Kebonrejo, Kec. Genteng" (show name and district)
+                    val district = item.districtName
+                    if (district != null) {
+                        "$areaName, $district"
+                    } else {
+                        areaName
+                    }
+                }
+                else -> areaName
             }
         }
 

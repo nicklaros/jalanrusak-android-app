@@ -15,7 +15,13 @@ data class TopAreaResponse(
     @SerializedName("level")
     val level: String,
     @SerializedName("report_count")
-    val reportCount: Int
+    val reportCount: Int,
+    @SerializedName("province_name")
+    val provinceName: String?,
+    @SerializedName("city_name")
+    val cityName: String?,
+    @SerializedName("district_name")
+    val districtName: String?
 )
 
 /**

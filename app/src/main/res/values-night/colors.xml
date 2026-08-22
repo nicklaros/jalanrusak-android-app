@@ -27,4 +27,7 @@
     <!-- Overlay colors -->
     <color name="overlay_background">#E6000000</color>
     <color name="overlay_text">#f9fafb</color>
+
+    <!-- Map status colors (aliases inherit day/night; only non-alias needs a night value) -->
+    <color name="status_pending_resolved">#a78bfa</color>
 </resources>

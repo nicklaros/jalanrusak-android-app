@@ -81,5 +81,11 @@
     <!-- Map -->
     <string name="map_title">Peta Jalan Rusak</string>
     <string name="map_more_results">Zoom in untuk melihat semua %1$d laporan</string>
+    <string name="map_locate_me">Lokasi saya</string>
+    <string name="map_location_permission_denied">Izin lokasi diperlukan untuk menemukan posisi Anda</string>
+    <string name="map_zoom_hint">Perbesar peta untuk melihat laporan jalan rusak</string>
+    <string name="map_legend_title">Legenda</string>
+    <string name="map_legend_verified">Terverifikasi</string>
+    <string name="map_legend_pending_resolved">Menunggu verifikasi perbaikan</string>
     <string name="home_view_map">Lihat Peta</string>
 </resources>

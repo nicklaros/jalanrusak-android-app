@@ -27,4 +27,19 @@
     <!-- Overlay colors -->
     <color name="overlay_background">#E6FFFFFF</color>
     <color name="overlay_text">#111827</color>
+
+    <!-- Map status colors (aliases follow day/night values automatically) -->
+    <color name="status_verified">@color/success</color>
+    <color name="status_under_verification">@color/warning</color>
+    <color name="status_submitted">@color/primary</color>
+    <color name="status_pending_resolved">#7c3aed</color>
+    <color name="status_resolved">#0d9488</color>
+    <color name="status_archived">#9ca3af</color>
+    <color name="status_other">@color/error</color>
+
+    <!-- Map overlay colors - FIXED in both themes (map tiles are always light) -->
+    <color name="map_icon_stroke">#ffffff</color>
+    <color name="map_icon_text">#ffffff</color>
+    <color name="map_cluster_fill">#374151</color>
+    <color name="map_fab_idle">#ffffff</color>
 </resources>

@@ -33,7 +33,7 @@ class MapViewModel(
                 val bbox = "${bounds.lonWest},${bounds.latSouth}," +
                           "${bounds.lonEast},${bounds.latNorth}"
 
-                val result = getMapReportsUseCase(bbox)
+                val result = getMapReportsUseCase(bbox, MAP_STATUSES)
 
                 when (result) {
                     is com.jalanrusak.util.Result.Success -> {
@@ -69,5 +69,14 @@ class MapViewModel(
         data class Success(val features: List<MapFeature>, val total: Int) : MapUiState()
         data class SuccessWithMore(val features: List<MapFeature>, val total: Int) : MapUiState()
         data class Error(val message: String) : MapUiState()
+    }
+
+    companion object {
+        /**
+         * The public map only shows confirmed damage and fixes in progress.
+         * Backend statuses: submitted, under_verification, verified,
+         * pending_resolved, resolved, archived (comma-separated filter).
+         */
+        const val MAP_STATUSES = "verified,pending_resolved"
     }
 }

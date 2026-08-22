@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jalanrusak.data.api.dto.MapFeature
 import com.jalanrusak.domain.usecase.GetMapReportsUseCase
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.osmdroid.util.BoundingBox
-import org.osmdroid.util.GeoPoint
 
 class MapViewModel(
     private val getMapReportsUseCase: GetMapReportsUseCase
@@ -18,8 +18,13 @@ class MapViewModel(
     private val _uiState = MutableStateFlow<MapUiState>(MapUiState.Idle)
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
 
+    private var currentLoadJob: Job? = null
+
     fun loadReportsForBounds(bounds: BoundingBox) {
-        viewModelScope.launch {
+        // Cancel any previous in-flight request
+        currentLoadJob?.cancel()
+
+        currentLoadJob = viewModelScope.launch {
             _uiState.value = MapUiState.Loading
 
             try {
@@ -50,7 +55,10 @@ class MapViewModel(
                     }
                 }
             } catch (e: Exception) {
-                _uiState.value = MapUiState.Error(e.message ?: "Unknown error")
+                // Don't show error if the request was cancelled (user moved map again)
+                if (e !is kotlinx.coroutines.CancellationException) {
+                    _uiState.value = MapUiState.Error(e.message ?: "Unknown error")
+                }
             }
         }
     }

@@ -14,6 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.jalanrusak.JalanRusakApp
 import com.jalanrusak.R
 import com.jalanrusak.databinding.ActivityMapBinding
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tileonline.TileSourceFactory
@@ -27,6 +29,9 @@ class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private val markers = mutableListOf<Marker>()
     private val polylines = mutableListOf<Polyline>()
+
+    // Debounce job for map movements
+    private var mapMovementJob: Job? = null
 
     private val viewModel: MapViewModel by viewModels {
         MapViewModelFactory(
@@ -80,35 +85,38 @@ class MapActivity : AppCompatActivity() {
         map.controller.setZoom(5.0)
         map.controller.setCenter(indonesia)
 
-        // Listen for map changes with debounce to avoid too many API calls
+        // Listen for map changes with proper debounce
         val mapListener = object : org.osmdroid.events.MapListener {
-            private var lastScrollTime = 0L
-            private var lastZoomTime = 0L
-            private val debounceDelay = 500L // ms
-
             override fun onScroll(event: org.osmdroid.events.ScrollEvent): Boolean {
-                val now = System.currentTimeMillis()
-                if (now - lastScrollTime > debounceDelay) {
-                    lastScrollTime = now
-                    loadReportsForCurrentBounds()
-                }
+                debounceMapLoad()
                 return false
             }
 
             override fun onZoom(event: org.osmdroid.events.ZoomEvent): Boolean {
-                val now = System.currentTimeMillis()
-                if (now - lastZoomTime > debounceDelay) {
-                    lastZoomTime = now
-                    loadReportsForCurrentBounds()
-                }
+                debounceMapLoad()
                 return false
             }
         }
 
         map.addMapListener(mapListener)
 
-        // Initial load
+        // Initial load (no debounce needed for first load)
         loadReportsForCurrentBounds()
+    }
+
+    /**
+     * Debounce map loading - only loads after user stops moving the map
+     * Cancels any pending requests and waits 1500ms after the last movement
+     */
+    private fun debounceMapLoad() {
+        // Cancel any pending load
+        mapMovementJob?.cancel()
+
+        // Start a new debounced load
+        mapMovementJob = lifecycleScope.launch {
+            delay(1500) // Wait 1.5 seconds after last movement
+            loadReportsForCurrentBounds()
+        }
     }
 
     private fun loadReportsForCurrentBounds() {

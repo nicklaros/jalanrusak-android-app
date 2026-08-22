@@ -44,16 +44,10 @@ class TopAreasAdapter(
             // Format name with parent area context
             val displayName = formatAreaName(item)
             binding.areaNameText.text = displayName
-            binding.areaCodeText.text = item.code
             binding.reportCountText.text = item.reportCount.toString()
 
-            // Set rank badge color
-            val rankColor = when (item.rank) {
-                1 -> R.color.accent // Gold - first place
-                2 -> R.color.gray_500 // Silver - second place
-                3 -> R.color.warning // Bronze - third place
-                else -> R.color.primary
-            }
+            // Medal emoji carries the color for ranks 1-3; plain "#n" text uses primary
+            val rankColor = if (item.rank <= 3) R.color.gray_700 else R.color.primary
             binding.rankText.setTextColor(
                 ContextCompat.getColor(binding.root.context, rankColor)
             )
@@ -85,10 +79,10 @@ class TopAreasAdapter(
                     }
                 }
                 "subdistrict" -> {
-                    // "Kel. Kebonrejo, Kec. Genteng" (show name and district)
-                    val district = item.districtName
-                    if (district != null) {
-                        "$areaName, $district"
+                    // "Kel. Kebonrejo, Kec. Genteng, Kota Surabaya, Jawa Timur"
+                    val parents = listOfNotNull(item.districtName, item.cityName, item.provinceName)
+                    if (parents.isNotEmpty()) {
+                        "$areaName, ${parents.joinToString()}"
                     } else {
                         areaName
                     }

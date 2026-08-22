@@ -113,7 +113,7 @@ class HomeActivity : AppCompatActivity() {
     private fun setupSwipeRefresh() {
         binding.swipeRefresh.setColorSchemeColors(
             ContextCompat.getColor(this, R.color.primary),
-            ContextCompat.getColor(this, R.color.accent)
+            ContextCompat.getColor(this, R.color.primary_light)
         )
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadTopAreas()

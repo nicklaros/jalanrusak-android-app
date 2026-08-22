@@ -12,6 +12,8 @@
     <!-- Status colors -->
     <color name="success">#22c55e</color>
     <color name="warning">#f59e0b</color>
+    <color name="warning_soft">#fef3c7</color>
+    <color name="warning_strong">#b45309</color>
     <color name="error">#dc2626</color>
 
     <!-- Neutral colors -->

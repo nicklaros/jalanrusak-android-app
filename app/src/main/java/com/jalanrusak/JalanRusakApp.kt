@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import com.jalanrusak.data.api.ApiClient
 import com.jalanrusak.data.local.TokenManager
 import com.jalanrusak.data.repository.AuthRepository
@@ -28,6 +29,9 @@ class JalanRusakApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Pin the app to light theme: primary use is outdoors in daylight,
+        // and map tiles are always light (see values/colors.xml)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         createNotificationChannel()
         initializeDependencies()
     }

@@ -5,6 +5,7 @@ import com.jalanrusak.data.api.getBodyOrThrow
 import com.jalanrusak.data.api.dto.CreateReportRequest
 import com.jalanrusak.data.api.dto.PointDto
 import com.jalanrusak.data.api.dto.ReportResponse
+import com.jalanrusak.data.api.dto.TopAreasListResponse
 import com.jalanrusak.util.Result
 import com.jalanrusak.util.catchSuspend
 import kotlinx.coroutines.Dispatchers
@@ -35,5 +36,11 @@ class ReportRepository {
     private fun generateDefaultTitle(lat: Double, lng: Double): String {
         val date = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale("id", "ID")).format(Date())
         return "Kerusakan jalan - $date"
+    }
+
+    suspend fun getTopAreas(level: String = "city"): Result<TopAreasListResponse> = withContext(Dispatchers.IO) {
+        Result.catchSuspend {
+            ApiClient.getTopAreas(level)
+        }
     }
 }

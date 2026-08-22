@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary colors - adjusted for dark mode -->
+    <color name="primary">#38bdf8</color>
+    <color name="primary_dark">#0ea5e9</color>
+    <color name="primary_light">#7dd3fc</color>
+
+    <!-- Accent colors - adjusted for better contrast in dark mode -->
+    <color name="accent">#f87171</color>
+    <color name="accent_dark">#ef4444</color>
+
+    <!-- Status colors - adjusted for dark backgrounds -->
+    <color name="success">#4ade80</color>
+    <color name="warning">#fbbf24</color>
+    <color name="error">#f87171</color>
+
+    <!-- Neutral colors - LIGHT colors for dark mode backgrounds -->
+    <color name="white">#121212</color>  <!-- Dark background compatibility -->
+    <color name="black">#ffffff</color>  <!-- Inverted for dark mode -->
+    <color name="gray_100">#1f2937</color>    <!-- Dark background -->
+    <color name="gray_200">#374151</color>    <!-- Slightly lighter -->
+    <color name="gray_300">#4b5563</color>    <!-- Border color -->
+    <color name="gray_500">#9ca3af</color>    <!-- Secondary text -->
+    <color name="gray_700">#d1d5db</color>    <!-- Primary text on dark -->
+    <color name="gray_900">#f9fafb</color>    <!-- Nearly white for main text -->
+
+    <!-- Overlay colors -->
+    <color name="overlay_background">#E6000000</color>
+    <color name="overlay_text">#f9fafb</color>
+</resources>

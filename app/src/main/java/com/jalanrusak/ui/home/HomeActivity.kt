@@ -20,6 +20,7 @@ import com.jalanrusak.JalanRusakApp
 import com.jalanrusak.R
 import com.jalanrusak.databinding.ActivityHomeBinding
 import com.jalanrusak.ui.login.LoginActivity
+import com.jalanrusak.ui.map.MapActivity
 import com.jalanrusak.ui.overlay.QuickReportOverlay
 import kotlinx.coroutines.launch
 
@@ -122,6 +123,10 @@ class HomeActivity : AppCompatActivity() {
     private fun setupUI() {
         binding.reportNowButton.setOnClickListener {
             onReportNowClicked()
+        }
+
+        binding.viewMapButton.setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
         }
 
         binding.grantButton.setOnClickListener { requestPermissions() }

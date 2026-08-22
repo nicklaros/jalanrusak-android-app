@@ -8,6 +8,7 @@ import com.jalanrusak.data.api.ApiClient
 import com.jalanrusak.data.local.TokenManager
 import com.jalanrusak.data.repository.AuthRepository
 import com.jalanrusak.data.repository.ReportRepository
+import com.jalanrusak.domain.usecase.GetMapReportsUseCase
 import com.jalanrusak.domain.usecase.GetTopAreasUseCase
 import com.jalanrusak.domain.usecase.LoginUseCase
 import com.jalanrusak.domain.usecase.SubmitQuickReportUseCase
@@ -22,6 +23,7 @@ class JalanRusakApp : Application() {
     private lateinit var loginUseCase: LoginUseCase
     private lateinit var submitQuickReportUseCase: SubmitQuickReportUseCase
     private lateinit var getTopAreasUseCase: GetTopAreasUseCase
+    private lateinit var getMapReportsUseCase: GetMapReportsUseCase
     private lateinit var locationManager: LocationManager
 
     override fun onCreate() {
@@ -45,6 +47,7 @@ class JalanRusakApp : Application() {
         loginUseCase = LoginUseCase(authRepository)
         submitQuickReportUseCase = SubmitQuickReportUseCase(reportRepository, authRepository)
         getTopAreasUseCase = GetTopAreasUseCase(reportRepository)
+        getMapReportsUseCase = GetMapReportsUseCase(ApiClient)
 
         // Initialize services
         locationManager = LocationManager(applicationContext)
@@ -59,6 +62,8 @@ class JalanRusakApp : Application() {
     fun provideSubmitQuickReportUseCase(): SubmitQuickReportUseCase = submitQuickReportUseCase
 
     fun provideGetTopAreasUseCase(): GetTopAreasUseCase = getTopAreasUseCase
+
+    fun provideGetMapReportsUseCase(): GetMapReportsUseCase = getMapReportsUseCase
 
     fun provideLocationManager(): LocationManager = locationManager
 

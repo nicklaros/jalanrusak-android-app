@@ -228,7 +228,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/home_report_now"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -236,6 +236,23 @@
                 app:cornerRadius="12dp"
                 app:elevation="2dp"
                 app:icon="@drawable/ic_report"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white" />
+
+            <!-- View Map Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/viewMapButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/home_view_map"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:backgroundTint="@color/primary"
+                app:cornerRadius="12dp"
+                app:elevation="2dp"
+                app:icon="@android:drawable/ic_dialog_map"
                 app:iconGravity="textStart"
                 app:iconTint="@color/white" />
 

@@ -68,6 +68,9 @@ dependencies {
     // Location
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
+    // Map (OSMDroid - OpenStreetMap)
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
+
     // Work Manager
     implementation("androidx.work:work-runtime-ktx:2.9.0")
 

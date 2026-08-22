@@ -77,4 +77,9 @@
     <!-- Common -->
     <string name="loading">Memuat…</string>
     <string name="retry">Coba Lagi</string>
+
+    <!-- Map -->
+    <string name="map_title">Peta Jalan Rusak</string>
+    <string name="map_more_results">Zoom in untuk melihat semua %1$d laporan</string>
+    <string name="home_view_map">Lihat Peta</string>
 </resources>

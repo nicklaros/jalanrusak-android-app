@@ -2,6 +2,7 @@ package com.jalanrusak.data.api
 
 import com.jalanrusak.BuildConfig
 import com.jalanrusak.data.api.dto.*
+import com.jalanrusak.data.api.dto.MapResponse
 import com.jalanrusak.data.api.dto.TopAreasListResponse
 import com.jalanrusak.data.local.TokenManager
 import kotlinx.coroutines.runBlocking
@@ -80,6 +81,15 @@ object ApiClient {
         val response = apiService.getTopAreas(level)
         return response.getBodyOrThrow()
     }
+
+    suspend fun getMapReports(
+        bbox: String,
+        status: String? = null,
+        limit: Int = 100
+    ): MapResponse {
+        val response = apiService.getMapReports(bbox, status, limit)
+        return response.getBodyOrThrow()
+    }
 }
 
 interface JalanRusakApi {
@@ -100,6 +110,14 @@ interface JalanRusakApi {
     suspend fun getTopAreas(
         @Query("level") level: String
     ): Response<TopAreasListResponse>
+
+    // Public Map (no auth required)
+    @GET("damaged-roads/map")
+    suspend fun getMapReports(
+        @Query("bbox") bbox: String,
+        @Query("status") status: String? = null,
+        @Query("limit") limit: Int = 100
+    ): Response<MapResponse>
 }
 
 // Wrapper for Response to handle errors more easily
